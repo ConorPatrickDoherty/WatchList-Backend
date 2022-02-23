@@ -1,0 +1,23 @@
+Resources:
+  GeneralTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: 'pk'
+          AttributeType: 'S'
+        - AttributeName: 'entity'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'pk'
+          KeyType: 'HASH'
+        - AttributeName: 'entity'
+          KeyType: 'RANGE'
+      BillingMode: PAY_PER_REQUEST
+      TableName: WL-${self:custom.stage}-${self:custom.generalTableName}
+
+Outputs:
+  GeneralTable:
+    Value:
+      Ref: GeneralTable
+    Export:
+      Name: WL-${self:custom.stage}-${self:custom.generalTableName}
