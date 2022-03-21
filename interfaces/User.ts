@@ -1,23 +1,23 @@
 export interface User {
-    ID: String;
-    DisplayName: String;
-    DisplayPicture: String;
-    Email: String;
-    CreatedAt: String;
-    Groups: UserGroup[];
-    Confirmed: Boolean;
+    id: string;
+    displayName: string;
+    displayPicture: string;
+    email: string;
+    createdAt: string;
+    groups: UserGroup[];
+    confirmed: boolean;
 }
 
 export interface UserGroup {
-    ID: String;
-    Name: String;
-    Code: String;
-    Joined: Boolean;
-    InvitedBy: UserInvite;
+    id: string;
+    name: string;
+    code: string;
+    joined: boolean;
+    invitedBy: UserInvite;
 }
 
 export interface UserInvite {
-    ID: String;
-    DisplayName: String;
-    InvitedAt: Date;
+    id: string;
+    displayName: string;
+    invitedAt: string;
 }

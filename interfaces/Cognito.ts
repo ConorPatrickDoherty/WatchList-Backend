@@ -1,8 +1,8 @@
 export interface CognitoUserAttributes {
-    sub: String,
-    'cognito:email_alias': String,
-    email_verified: Boolean,
-    'cognito:user_status': String,
-    preferred_username: String,
-    email: String
+    sub: string,
+    'cognito:email_alias': string,
+    email_verified: boolean,
+    'cognito:user_status': string,
+    preferred_username: string,
+    email: string
 }

@@ -12,16 +12,16 @@ export class UserRepository {
         const date: string = new Date().toISOString();
 
         const user = {
-            ID: attributes.sub,
-            Entity: 'user',
+            id: attributes.sub,
+            entity: 'user',
             pk: `user#${attributes.sub}`,
             sk: `user#${attributes.sub}`,
-            DisplayName: attributes.preferred_username,
-            DisplayPicture: '',
-            Email: attributes.email,
-            CreatedAt: date,
-            Groups: [],
-            Confirmed: false
+            displayName: attributes.preferred_username,
+            displayPicture: '',
+            email: attributes.email,
+            createdAt: date,
+            groups: [],
+            confirmed: false
         }
 
         return this.db.put(Object.assign(new UserItem(), user));
@@ -43,7 +43,13 @@ export class UserRepository {
 		});
 	}
 
-    public async update() {
-        
+    public async update(userId: string, changes: Partial<User>) {
+        return this.db.update(Object.assign(new UserItem(), {
+			pk: `user#${userId}`,
+			sk: `user#${userId}`,
+			...changes
+		}), {
+			onMissing: 'skip'
+		});
     }
 }

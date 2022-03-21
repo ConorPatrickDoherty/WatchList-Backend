@@ -37,7 +37,7 @@ test('Cognito Signup trigger works and user doc is inserted into DB', (done) => 
   signUp.then(async (user: any) => {
     const userId: string = user.userSub;
     const dbUser = await unitOfWork.Users.getById(userId)
-
+    
     await unitOfWork.Users.delete(userId)
 
     const cognitoService = new AWS.CognitoIdentityServiceProvider({ region: 'eu-west-1' });
@@ -45,9 +45,8 @@ test('Cognito Signup trigger works and user doc is inserted into DB', (done) => 
       UserPoolId: config.UserPoolId,
       Username: userData.Username
     }).promise().then(() => {
-      expect(dbUser.Email).toBe(user.user.username);
-      expect(dbUser.ID).toBe(user.userSub)
-      expect(200).toBe(200);
+      expect(dbUser.email).toBe(user.user.username);
+      expect(dbUser.id).toBe(user.userSub)
     });
     done();
   });

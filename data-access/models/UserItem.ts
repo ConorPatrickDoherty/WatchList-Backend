@@ -4,23 +4,23 @@ import { User, UserGroup } from '../../interfaces';
 
 export class UserItem extends DynamoDbItem implements User {
     @attribute()
-    public ID: String;
+    public id: string;
 
     @attribute()
-    public DisplayName: String;
+    public displayName: string;
 
     @attribute()
-    public DisplayPicture: String;
+    public displayPicture: string;
 
     @attribute()
-    public Email: String;
+    public email: string;
 
     @attribute()
-    public CreatedAt: String;
+    public createdAt: string;
 
     @attribute()
-    public Groups: UserGroup[];
+    public groups: UserGroup[];
 
     @attribute()
-    public Confirmed: Boolean;
+    public confirmed: boolean;
 }
