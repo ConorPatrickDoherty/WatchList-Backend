@@ -36,9 +36,9 @@ test('Cognito Signup trigger works and user doc is inserted into DB', (done) => 
   
   signUp.then(async (user: any) => {
     const userId: string = user.userSub;
-    const dbUser = await unitOfWork.Users.GetById(userId)
+    const dbUser = await unitOfWork.Users.getById(userId)
 
-    await unitOfWork.Users.Delete(userId)
+    await unitOfWork.Users.delete(userId)
 
     const cognitoService = new AWS.CognitoIdentityServiceProvider({ region: 'eu-west-1' });
     cognitoService.adminDeleteUser({

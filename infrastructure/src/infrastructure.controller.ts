@@ -8,7 +8,7 @@ export class InfrastructureController {
     public postSignUp: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent) => {
         const attributes: CognitoUserAttributes = event.request.userAttributes;
 
-        await this.unitOfWork.Users.Create(attributes);
+        await this.unitOfWork.Users.create(attributes);
 
         return event;
     }

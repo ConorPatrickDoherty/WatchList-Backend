@@ -1,4 +1,4 @@
-import { InfrastructureController } from "./controller";
+import { InfrastructureController } from "./infrastructure.controller";
 import { CognitoUserPoolEvent } from 'aws-lambda';
 import { UnitOfWork } from "../../data-access/repositories/UnitOfWork";
 

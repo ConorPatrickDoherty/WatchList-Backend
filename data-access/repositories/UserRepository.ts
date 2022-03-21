@@ -8,7 +8,7 @@ export class UserRepository {
     public constructor(protected db: DataMapper) { 
     }
 
-    public async Create(attributes: CognitoUserAttributes): Promise<User> {
+    public async create(attributes: CognitoUserAttributes): Promise<User> {
         const date: string = new Date().toISOString();
 
         const user = {
@@ -27,14 +27,14 @@ export class UserRepository {
         return this.db.put(Object.assign(new UserItem(), user));
     }
 
-    public async GetById(userId: string): Promise<UserItem> {
+    public async getById(userId: string): Promise<UserItem> {
         return this.db.get(Object.assign(new UserItem(), {
 			pk: `user#${userId}`,
 			sk: `user#${userId}`
 		}));
     }
 
-    public async Delete(userId: string): Promise<User | undefined> {
+    public async delete(userId: string): Promise<User | undefined> {
 		return this.db.delete(Object.assign(new UserItem(), {
 			pk: `user#${userId}`,
 			sk: `user#${userId}`
@@ -42,4 +42,8 @@ export class UserRepository {
 			returnValues: 'ALL_OLD'
 		});
 	}
+
+    public async update() {
+        
+    }
 }
