@@ -2,14 +2,14 @@ Resources:
   ApiGatewayRestApi:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: WL-${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApi-
+      Name: ${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApi
 
 Outputs:
   ApiGatewayRestApiId:
     Value:
       Ref: ApiGatewayRestApi
     Export:
-      Name: WL-${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApiId
+      Name: ${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApiId
 
   ApiGatewayRestApiRootResourceId:
     Value:
@@ -17,4 +17,4 @@ Outputs:
         - ApiGatewayRestApi
         - RootResourceId
     Export:
-      Name: WL-${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApiRootResourceId
+      Name: ${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApiRootResourceId

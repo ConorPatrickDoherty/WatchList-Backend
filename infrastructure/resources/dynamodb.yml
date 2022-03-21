@@ -5,19 +5,21 @@ Resources:
       AttributeDefinitions:
         - AttributeName: 'pk'
           AttributeType: 'S'
-        - AttributeName: 'entity'
+        - AttributeName: 'sk'
           AttributeType: 'S'
+        # - AttributeName: 'entity'
+        #   AttributeType: 'S'
       KeySchema:
         - AttributeName: 'pk'
           KeyType: 'HASH'
-        - AttributeName: 'entity'
+        - AttributeName: 'sk'
           KeyType: 'RANGE'
       BillingMode: PAY_PER_REQUEST
-      TableName: WL-${self:custom.stage}-${self:custom.generalTableName}
+      TableName: ${self:custom.projectName}-Table-${self:custom.stage}
 
 Outputs:
   GeneralTable:
     Value:
       Ref: GeneralTable
     Export:
-      Name: WL-${self:custom.stage}-${self:custom.generalTableName}
+      Name: ${self:custom.projectName}-Table-${self:custom.stage}

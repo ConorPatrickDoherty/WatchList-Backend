@@ -1,4 +1,4 @@
-service: WL-infrastructure
+service: WatchList-infrastructure
 frameworkVersion: ">=1.60.0"
 
 provider:
@@ -42,3 +42,11 @@ functions:
       - http:
           path: /test
           method: get
+  postSignUp:
+    handler: src/handler.postSignUp
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.projectName}-${self:custom.stage}-Pool
+          trigger: CustomMessage
+          existing: true
+          forceDeploy: true

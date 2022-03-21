@@ -1,12 +1,20 @@
-import {  CognitoUserPoolEvent } from 'aws-lambda';
+import { CognitoUserPoolEvent } from 'aws-lambda';
+import { CognitoUserAttributes } from '../../interfaces';
+import { UnitOfWork } from '../../data-access/repositories/UnitOfWork';
 
 export class InfrastructureController {
-    public constructor() {}
+    public constructor(private unitOfWork: UnitOfWork) {}
 
     public postSignUp: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent) => {
+        const attributes: CognitoUserAttributes = event.request.userAttributes;
+
+        await this.unitOfWork.Users.Create(attributes);
+
+        return event;
+    }
+
+    public temp: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent)  => {
         const msg: string = "Placeholder function so the infrastructure deploys";
-        
-        console.log(msg);
 
         return {
             'statusCode': 200,

@@ -2,7 +2,7 @@ Resources:
   CognitoUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: WL-${self:custom.stage}-${self:custom.projectName}Pool
+      UserPoolName: ${self:custom.projectName}-${self:custom.stage}-Pool
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -11,7 +11,7 @@ Resources:
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: WL-${self:custom.stage}-${self:custom.projectName}PoolClient
+      ClientName: ${self:custom.projectName}-${self:custom.stage}-PoolClient
       UserPoolId:
         Ref: CognitoUserPool
       ExplicitAuthFlows:
@@ -21,7 +21,7 @@ Resources:
   CognitoIdentityPool:
     Type: AWS::Cognito::IdentityPool
     Properties:
-      IdentityPoolName: WL-${self:custom.stage}-${self:custom.projectName}IdentityPool
+      IdentityPoolName: ${self:custom.projectName}-${self:custom.stage}-IdentityPool
       AllowUnauthenticatedIdentities: false
       CognitoIdentityProviders:
         - ClientId: 
