@@ -50,3 +50,11 @@ functions:
           trigger: CustomMessage
           existing: true
           forceDeploy: true
+  postConfirmation:
+    handler: src/handler.postConfirmation
+    events:
+      - cognitoUserPool:
+          pool: ${self:custom.projectName}-${self:custom.stage}-Pool
+          trigger: PostConfirmation
+          existing: true
+          forceDeploy: true

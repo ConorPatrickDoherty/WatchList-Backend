@@ -8,17 +8,26 @@ export class InfrastructureController {
     public postSignUp: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent) => {
         const attributes: CognitoUserAttributes = event.request.userAttributes;
 
-        await this.unitOfWork.Users.create(attributes);
-
-        return event;
+        try {
+            await this.unitOfWork.Users.create(attributes);
+            return event;
+        } catch (err) {
+            return err;
+        }
     }
 
-    postConfirmation: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent) => {
-        const  attributes: CognitoUserAttributes = event.request.userAttributes;
+    public postConfirmation: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent) => {
+        const attributes: CognitoUserAttributes = event.request.userAttributes;
 
         const user: User = await this.unitOfWork.Users.getById(attributes.sub);
-
         user.confirmed = true;
+        
+        try {
+            await this.unitOfWork.Users.update(attributes.sub, {...user });
+            return event;
+        } catch(err) {
+            return err;
+        }
     }
 
     public temp: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent)  => {

@@ -43,7 +43,7 @@ export class UserRepository {
 		});
 	}
 
-    public async update(userId: string, changes: Partial<User>) {
+    public async update(userId: string, changes: Partial<User>): Promise<User> {
         return this.db.update(Object.assign(new UserItem(), {
 			pk: `user#${userId}`,
 			sk: `user#${userId}`,

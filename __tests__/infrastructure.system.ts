@@ -3,14 +3,69 @@ import * as AWS from 'aws-sdk';
 import 'jest';
 
 import { UnitOfWork } from '../data-access/repositories/UnitOfWork';
+import { UserItem } from '../data-access/models';
 import config from '../cognito-config'
 
-test('Cognito Signup trigger works and user doc is inserted into DB', (done) => {
+
+test('Cognito Signup trigger works', (done) => {  
+  const username = 'admin1@watchlistapp.com'
+  
+  //get user from Cognito
+  const signUpUser = getSignUpPromise(username);
+
+  signUpUser.then(async (user: any) => {
+    const userId: string = user.userSub;
+
+    //Get user from db
+    const unitOfWork: UnitOfWork = new UnitOfWork();
+    const dbUser = await unitOfWork.Users.getById(userId)
+
+    //Delete user from Cognito and the db
+    await unitOfWork.Users.delete(userId)
+
+    const deleteUser = getDeleteUserPromise(username);
+    deleteUser.then(() => {
+      expect(dbUser.email).toBe(user.user.username);
+      expect(dbUser.id).toBe(user.userSub)
+    });
+    done();
+  });
+});
+
+test('Cognito Confirmation trigger works', (done) => {
+  const username = 'admin2@watchlistapp.com'
+  
+  //get user from Cognito
+  const signUpUser = getSignUpPromise(username);
+  signUpUser.then(async (user: any) => {
+    const userId: string = user.userSub;
+
+    //confirm user in Cognito
+    const confirmUser = getConfirmUserPromise(username);
+    confirmUser.then(async () => {
+
+      //Get user from db
+      const unitOfWork: UnitOfWork = new UnitOfWork();
+      const dbUser:UserItem = await unitOfWork.Users.getById(userId)
+
+      //Delete user from Cognito and the db
+      await unitOfWork.Users.delete(userId)
+  
+      const deleteUser = getDeleteUserPromise(username);
+      deleteUser.then(() => {
+        expect(dbUser.confirmed).toBe(true);
+      });
+      done();
+    });
+  });
+});
+
+//Helper functions
+const getSignUpPromise = (username:string):Promise<any> => {
   const userPool: CognitoUserPool = new CognitoUserPool(config)
-  const unitOfWork: UnitOfWork = new UnitOfWork();
 
   const userData = {
-    Username: 'admin10@watchlistapp.com',
+    Username: username,
     Password: 'Passw0rd!',
   };
 
@@ -25,29 +80,41 @@ test('Cognito Signup trigger works and user doc is inserted into DB', (done) => 
     })
   ];
 
-  const signUp = new Promise((resolve, reject) => {
-    userPool.signUp(userData.Username, userData.Password, userAttributes, null, (err, res) => {
-      if (err) {
-        reject(err.message || JSON.stringify(err));
-      }
-      resolve(res);
+  return new Promise((resolve, reject) => {
+    userPool.signUp(userData.Username, userData.Password, userAttributes, null, 
+      (err, res) => {
+        if (err) {
+          reject(err.message || JSON.stringify(err));
+        }
+        resolve(res);
     })
   })
-  
-  signUp.then(async (user: any) => {
-    const userId: string = user.userSub;
-    const dbUser = await unitOfWork.Users.getById(userId)
-    
-    await unitOfWork.Users.delete(userId)
+}
 
-    const cognitoService = new AWS.CognitoIdentityServiceProvider({ region: 'eu-west-1' });
-    cognitoService.adminDeleteUser({
-      UserPoolId: config.UserPoolId,
-      Username: userData.Username
-    }).promise().then(() => {
-      expect(dbUser.email).toBe(user.user.username);
-      expect(dbUser.id).toBe(user.userSub)
-    });
-    done();
-  });
-});
+const getDeleteUserPromise = (username: string):Promise<any> => {
+  const cognitoService = new AWS.CognitoIdentityServiceProvider({ region: 'eu-west-1' });
+
+  return new Promise((resolve, reject) => {
+    cognitoService.adminDeleteUser({ UserPoolId: config.UserPoolId, Username: username}, 
+      (err, res) => {
+        if (err) {
+          reject(err.message || JSON.stringify(err));
+        }
+        resolve(res);
+    })
+  }) 
+}
+
+const getConfirmUserPromise = (username: string):Promise<any> => {
+  const cognitoService = new AWS.CognitoIdentityServiceProvider({ region: 'eu-west-1' });
+
+  return new Promise((resolve, reject) => {
+    cognitoService.adminConfirmSignUp({ UserPoolId: config.UserPoolId, Username: username}, 
+      (err, res) => {
+        if (err) {
+          reject(err.message || JSON.stringify(err));
+        }
+        resolve(res);
+    })
+  }) 
+}
