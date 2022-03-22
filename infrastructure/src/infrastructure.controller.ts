@@ -1,5 +1,5 @@
 import { CognitoUserPoolEvent } from 'aws-lambda';
-import { CognitoUserAttributes } from '../../interfaces';
+import { CognitoUserAttributes, User } from '../../interfaces';
 import { UnitOfWork } from '../../data-access/repositories/UnitOfWork';
 
 export class InfrastructureController {
@@ -8,9 +8,26 @@ export class InfrastructureController {
     public postSignUp: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent) => {
         const attributes: CognitoUserAttributes = event.request.userAttributes;
 
-        await this.unitOfWork.Users.Create(attributes);
+        try {
+            await this.unitOfWork.Users.create(attributes);
+            return event;
+        } catch (err) {
+            return err;
+        }
+    }
 
-        return event;
+    public postConfirmation: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent) => {
+        const attributes: CognitoUserAttributes = event.request.userAttributes;
+
+        const user: User = await this.unitOfWork.Users.getById(attributes.sub);
+        user.confirmed = true;
+        
+        try {
+            await this.unitOfWork.Users.update(attributes.sub, {...user });
+            return event;
+        } catch(err) {
+            return err;
+        }
     }
 
     public temp: CognitoUserPoolEvent = async (event: CognitoUserPoolEvent)  => {

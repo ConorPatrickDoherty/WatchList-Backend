@@ -1,7 +1,7 @@
 import { DataMapper } from "@aws/dynamodb-data-mapper";
 import { DynamoDB } from "aws-sdk";
 import { IUserRepository } from "../interfaces/IUserRepository";
-import { UserRepository } from "./User.Repository";
+import { UserRepository } from "./UserRepository";
 
 export class UnitOfWork {
     public Users:IUserRepository;
