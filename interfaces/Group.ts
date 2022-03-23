@@ -1,33 +1,34 @@
 export interface Group {
-    ID: String;
-    Name: String;
-    Code: String;
-    CreatedAt: Date;
-    Users: GroupUser[];
-    Movies: GroupMovie[];
-    Notifications: GroupNotification[];
+    id: string;
+    name: string;
+    code: string;
+    createdAt: string;
+    users: GroupUser[];
+    movies: GroupMovie[];
+    notifications: GroupNotification[];
 }
 
 export interface GroupUser {
-    ID: String;
-    DisplayName: String;
-    DisplayPicture: String;
-    Verified: Boolean;
-    JoinedAt: Date;
+    id: string;
+    admin: boolean;
+    displayName: string;
+    displayPicture: string; 
+    verified: boolean;
+    joinedAt: string;
 }
 
 export interface GroupMovie {
-    ID: String;
-    Name: String;
-    CreatedAt: Date;
-    Seen: Boolean;
-    Added: Date;
+    id: string;
+    name: string;
+    createdAt: string;
+    seen: boolean;
+    added: string;
 }
 
 export interface GroupNotification {
-    Thumbnail: String;
-    Body: String;
-    Icon: String;
-    CreatedAt: Date;
-    Link: String;
+    thumbnail: string;
+    body: string;
+    icon: string;
+    createdAt: string;
+    link: string;
 }

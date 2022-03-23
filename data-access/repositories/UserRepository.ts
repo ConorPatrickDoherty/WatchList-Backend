@@ -1,17 +1,16 @@
 import { DataMapper } from '@aws/dynamodb-data-mapper';
 
 import { UserItem } from '../models/UserItem';
-import { CognitoUserAttributes, User } from '../../interfaces';
+import { CognitoUserAttributes, GroupUser, User } from '../../interfaces';
 
 export class UserRepository {
 
-    public constructor(protected db: DataMapper) { 
-    }
+    public constructor(protected db: DataMapper) { }
 
     public async create(attributes: CognitoUserAttributes): Promise<User> {
         const date: string = new Date().toISOString();
 
-        const user = {
+        const user:UserItem = {
             id: attributes.sub,
             entity: 'user',
             pk: `user#${attributes.sub}`,
@@ -52,4 +51,16 @@ export class UserRepository {
 			onMissing: 'skip'
 		});
     }
+
+    // public async getUserForGroup(userId: string): Promise<GroupUser> {
+    //     try {
+    //         return await this.db.get(Object.assign(new UserItem(), {
+    //             pk: `user#${userId}`,
+    //             sk: `user#${userId}`
+    //         }), {
+    //             projection: keys<GroupUser>()
+    //         });
+    //     }
+
+    // }
 }

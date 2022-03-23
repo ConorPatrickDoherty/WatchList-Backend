@@ -22,7 +22,7 @@ provider:
       - '*'
 
 custom:
-  stage: dev
+  stage: ${opt:stage, self:provider.stage}
   generalTableName: WatchListAppTBL
   projectName: WatchListApp
 

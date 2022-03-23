@@ -1,0 +1,41 @@
+service: WatchList-Group-Service
+frameworkVersion: ">=1.60.0"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: eu-west-1
+  environment:
+    tableName: ${file(../../infrastructure/serverless.yml):custom.generalTableName}
+    ENVIRONMENT: ${opt:stage, self:provider.stage}
+  apiGateway:
+    restApiId:
+      'Fn::ImportValue': ${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApiId
+    restApiRootResourceId:
+      'Fn::ImportValue': ${self:custom.projectName}-${self:custom.stage}-ApiGatewayRestApiRootResourceId
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - '*'
+    - Effect: Allow
+      Action:
+        - 'execute-api:ManageConnections'
+      Resource:
+        - 'arn:aws:execute-api:*:*:**/@connections/*'
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  projectName: WatchListApp
+
+plugins:
+  - serverless-offline
+  - serverless-webpack
