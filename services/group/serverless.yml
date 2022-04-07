@@ -7,7 +7,7 @@ provider:
   stage: dev
   region: eu-west-1
   environment:
-    tableName: ${file(../../infrastructure/serverless.yml):custom.generalTableName}
+    tableName: ${file(../infrastructure/serverless.yml):custom.generalTableName}
     ENVIRONMENT: ${opt:stage, self:provider.stage}
   apiGateway:
     restApiId:
@@ -39,3 +39,29 @@ custom:
 plugins:
   - serverless-offline
   - serverless-webpack
+
+functions:
+  getGroup:
+    handler: src/handler.getGroup
+    events: 
+      - http:
+          path: /groups/{code}
+          method: get
+          cors: true
+          authorizer: aws_iam
+  createGroup:
+    handler: src/handler.createGroup
+    events: 
+      - http:
+          path: /groups
+          method: post
+          cors: true
+          authorizer: aws_iam
+  addUserWithCode: 
+    handler: src/handler.addUserWithCode
+    events: 
+      - http:
+          path: /groups/{code}
+          method: put
+          cors: true
+          authorizer: aws_iam
