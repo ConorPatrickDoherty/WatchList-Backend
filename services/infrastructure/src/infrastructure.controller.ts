@@ -1,6 +1,6 @@
 import { CognitoUserPoolEvent } from 'aws-lambda';
-import { CognitoUserAttributes, User } from '../../interfaces';
-import { UnitOfWork } from '../../data-access/repositories';
+import { CognitoUserAttributes, User } from '../../../interfaces';
+import { UnitOfWork } from '../../../data-access/repositories';
 
 export class InfrastructureController {
     public constructor(private unitOfWork: UnitOfWork) {}

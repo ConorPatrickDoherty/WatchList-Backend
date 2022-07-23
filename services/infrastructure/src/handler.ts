@@ -1,6 +1,6 @@
 import { InfrastructureController } from "./infrastructure.controller";
 import { CognitoUserPoolEvent } from 'aws-lambda';
-import { UnitOfWork } from "../../data-access";
+import { UnitOfWork } from "../../../data-access";
 
 const userRepo = new UnitOfWork();
 const controller = new InfrastructureController(userRepo);

@@ -1,8 +1,11 @@
-export interface User {
+export interface UserBrief {
     id: string;
     displayName: string;
     displayPicture: string;
     email: string;
+}
+
+export interface User extends UserBrief {
     createdAt: string;
     groups: UserGroup[];
     confirmed: boolean;

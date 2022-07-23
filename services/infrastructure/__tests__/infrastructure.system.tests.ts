@@ -2,9 +2,9 @@ import { CognitoUserPool, CognitoUserAttribute } from 'amazon-cognito-identity-j
 import * as AWS from 'aws-sdk';
 import 'jest';
 
-import { UnitOfWork } from '../data-access/repositories/UnitOfWork';
-import { UserItem } from '../data-access/models';
-import config from '../cognito-config'
+import { COGNITO_CONFIG }  from '../../../env/env';
+import { UnitOfWork } from '../../../data-access/repositories/UnitOfWork';
+import { User } from '../../../interfaces';
 
 
 test('Cognito Signup trigger works', (done) => {  
@@ -46,7 +46,7 @@ test('Cognito Confirmation trigger works', (done) => {
 
       //Get user from db
       const unitOfWork: UnitOfWork = new UnitOfWork();
-      const dbUser:UserItem = await unitOfWork.Users.getById(userId)
+      const dbUser:User = await unitOfWork.Users.getById(userId)
 
       //Delete user from Cognito and the db
       await unitOfWork.Users.delete(userId)
@@ -62,7 +62,7 @@ test('Cognito Confirmation trigger works', (done) => {
 
 //Helper functions
 const getSignUpPromise = (username:string):Promise<any> => {
-  const userPool: CognitoUserPool = new CognitoUserPool(config)
+  const userPool: CognitoUserPool = new CognitoUserPool(COGNITO_CONFIG)
 
   const userData = {
     Username: username,
@@ -95,7 +95,7 @@ const getDeleteUserPromise = (username: string):Promise<any> => {
   const cognitoService = new AWS.CognitoIdentityServiceProvider({ region: 'eu-west-1' });
 
   return new Promise((resolve, reject) => {
-    cognitoService.adminDeleteUser({ UserPoolId: config.UserPoolId, Username: username}, 
+    cognitoService.adminDeleteUser({ UserPoolId: COGNITO_CONFIG.UserPoolId, Username: username}, 
       (err, res) => {
         if (err) {
           reject(err.message || JSON.stringify(err));
@@ -109,7 +109,7 @@ const getConfirmUserPromise = (username: string):Promise<any> => {
   const cognitoService = new AWS.CognitoIdentityServiceProvider({ region: 'eu-west-1' });
 
   return new Promise((resolve, reject) => {
-    cognitoService.adminConfirmSignUp({ UserPoolId: config.UserPoolId, Username: username}, 
+    cognitoService.adminConfirmSignUp({ UserPoolId: COGNITO_CONFIG.UserPoolId, Username: username}, 
       (err, res) => {
         if (err) {
           reject(err.message || JSON.stringify(err));

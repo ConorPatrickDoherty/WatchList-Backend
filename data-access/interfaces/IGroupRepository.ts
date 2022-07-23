@@ -1,6 +1,7 @@
-import { Group } from "../../interfaces";
-import { UserItem } from "../models";
+import { Group, UserBrief } from "../../interfaces";
 
 export interface IGroupRepository {
-    create(toCreate: Partial<Group>, user: UserItem)
+    getByCode(code: string): Promise<Group>
+    create(toCreate: Partial<Group>, user: UserBrief): Promise<Group>
+    update(code: string, userId: string, changes: Partial<Group>): Promise<Group>
 }

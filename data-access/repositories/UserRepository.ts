@@ -1,7 +1,7 @@
 import { DataMapper } from '@aws/dynamodb-data-mapper';
 
 import { UserItem } from '../models/UserItem';
-import { CognitoUserAttributes, GroupUser, User } from '../../interfaces';
+import { CognitoUserAttributes, User, UserBrief } from '../../interfaces';
 
 export class UserRepository {
 
@@ -27,11 +27,29 @@ export class UserRepository {
     }
 
     public async getById(userId: string): Promise<UserItem> {
-        return this.db.get(Object.assign(new UserItem(), {
-			pk: `user#${userId}`,
-			sk: `user#${userId}`
-		}));
+        try {
+            return await this.db.get(Object.assign(new UserItem(), {
+                pk: `user#${userId}`,
+                sk: `user#${userId}`
+            }));
+        } catch {
+            return undefined
+        }
+
     }
+
+    public async getUserBrief(userId: string): Promise<UserBrief> {
+		try {
+			return await this.db.get(Object.assign(new UserItem(), {
+				pk: `user#${userId}`,
+				sk: `user#${userId}`
+			}), {
+				projection: [ 'id', 'displayName', 'displayPicture', 'email']
+			});
+		} catch {
+			return undefined;
+		}
+	}
 
     public async delete(userId: string): Promise<User | undefined> {
 		return this.db.delete(Object.assign(new UserItem(), {

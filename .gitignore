@@ -7,3 +7,4 @@ jspm_packages
 
 cognito-config.ts
 env.ts
+.webpack
